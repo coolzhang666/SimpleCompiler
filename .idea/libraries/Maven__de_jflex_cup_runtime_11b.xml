@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: de.jflex:cup_runtime:11b">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/de/jflex/cup_runtime/11b/cup_runtime-11b.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/de/jflex/cup_runtime/11b/cup_runtime-11b-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/de/jflex/cup_runtime/11b/cup_runtime-11b-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

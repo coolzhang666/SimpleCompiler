@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Compiler</title>
+</head>
+<link type="text/css" rel="stylesheet" href="css/index.css"/>
+<script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+<body>
+<div class="header">
+    <span class="title">简单编译器演示工具</span>
+</div>
+<div class="container">
+    <div class="left">
+        <div class="tool-bar">
+            <button class="button run">点击运行</button>
+        </div>
+        <div id="editor"></div>
+        <script src="ace/ace.js" type="text/javascript" charset="utf-8"></script>
+        <script src="ace/mode-c_cpp.js" type="text/javascript" charset="utf-8"></script>
+        <script src="ace/theme-dawn.js" type="text/javascript" charset="utf-8"></script>
+        <script>
+            var editor = ace.edit("editor");
+            var CMode = ace.require("ace/mode/c_cpp").Mode;
+            editor.session.setMode(new CMode());
+            editor.setTheme("ace/theme/dawn");
+        </script>
+    </div>
+    <div class="right">
+        <div class="right-title tool-bar">运行数据</div>
+        <div class="right-items">
+            <div class="line">
+                <div class="item item-lexical">
+                    <div class="item-bar">
+                        <div class="item-title">词法分析</div>
+                        <img id="item-status-lexical" class="item-status" src="/images/wait.png"/>
+                    </div>
+                    <div class="item-content item-content-lexical">
+                        <textarea class="lexical" readonly></textarea>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="item-bar">
+                        <div class="item-title">语法分析</div>
+                        <img class="item-status" src="/images/wait.png"/>
+                    </div>
+                    <div class="item-content">
+                        <textarea ></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="line">
+                <div class="item">
+                    <div class="item-bar">
+                        <div class="item-title">语义分析</div>
+                        <img class="item-status" src="/images/wait.png"/>
+                    </div>
+                    <div class="item-content">
+                        <textarea ></textarea>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="item-bar">
+                        <div class="item-title">中间代码</div>
+                        <img class="item-status" src="/images/wait.png"/>
+                    </div>
+                    <div class="item-content">
+                        <textarea ></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="line">
+                <div class="item">
+                    <div class="item-bar">
+                        <div class="item-title">DAG优化</div>
+                        <img class="item-status" src="/images/wait.png"/>
+                    </div>
+                    <div class="item-content">
+                        <textarea ></textarea>
+                    </div>
+                </div>
+                <div class="item"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="footer">
+    <span class="beian">渝ICP备18000549号</span>
+</div>
+</body>
+</html>
