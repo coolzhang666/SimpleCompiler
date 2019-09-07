@@ -1,0 +1,68 @@
+code->program
+program->code_block program
+program->code_block
+code_block->variable_declaration
+code_block->statement
+variable_declaration->type identifier variable_declaration_right
+type->int
+type->float
+type->char
+variable_declaration_right->init variable_declaration_list
+variable_declaration_right->variable_declaration_list
+init->= expression
+expression->assignment_expression @ P0 null
+assignment_expression->or_expression @ P0 null
+assignment_expression->or_expression = or_expression @ N G2
+or_expression->and_expression @ P0 null
+or_expression->and_expression || and_expression @ N1 G4
+and_expression->relational_expression @ P0 null
+and_expression->relational_expression && relational_expression @ N1 G4
+relational_expression->arithmetic_expression @ P0 null
+relational_expression->arithmetic_expression relational_operator arithmetic_expression @ N1 G3
+arithmetic_expression->item @ P0 null
+arithmetic_expression->item add_sub_operator item @ N G2
+item->factor @ P0 null
+item->factor mul_dev_operator factor @ N G2
+factor->! factor @ N G1
+factor->identifier @ P0 null
+factor->( expression ) @ P1 null
+factor->constant @ P0 null
+constant->integer @ E null
+constant->character @ E null
+constant->string @ E null
+relational_operator->> @ E null
+relational_operator->< @ E null
+relational_operator->>= @ E null
+relational_operator-><= @ E null
+relational_operator->== @ E null
+relational_operator->!= @ E null
+add_sub_operator->+ @ E null
+add_sub_operator->- @ E null
+mul_dev_operator->* @ E null
+mul_dev_operator->/ @ E null
+mul_dev_operator->% @ E null
+variable_declaration_list->temp init variable_declaration_list
+variable_declaration_list->temp variable_declaration_list
+variable_declaration_list->temp ;
+variable_declaration_list->;
+temp->, identifier
+statement->expression ;
+statement->while_loop
+statement->for_loop
+statement->dowhile_loop
+statement->if_statement
+statement->break ;
+statement->continue ;
+statement->return ;
+statement->return expression ;
+while_loop->kw_while ( expression ) block @ N1 G8
+kw_while->while @ N1 G9
+block->{ program }
+block->{ }
+for_loop->for ( expression ; expression ; expression ) block
+dowhile_loop->do block kw_while ( expression ) ;
+if_statement->if_statement_begin else_statement
+if_statement->if_statement_begin
+if_statement_begin->if ( expression ) block @ N1 G5
+else_statement->kw_else block @ N1 G7
+kw_else->else @ N1 G6

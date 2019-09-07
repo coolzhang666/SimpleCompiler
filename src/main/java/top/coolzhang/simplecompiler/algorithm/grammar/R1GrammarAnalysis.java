@@ -274,7 +274,7 @@ public class R1GrammarAnalysis {
         }
     }
 
-    public void judge(List<String> list, List<String> list1) {
+    public boolean judge(List<String> list, List<String> list1) {
         LinkedList<String> token = new LinkedList<>(list);
         LinkedList<String> word = new LinkedList<>(list1);
         Stack<Integer> status = new Stack<>();
@@ -293,19 +293,20 @@ public class R1GrammarAnalysis {
                 if (info != null) {
                     if ("acc".equals(info)) {
                         System.out.println("语法分析通过");
-                        int a = 1;
-                        for (ArrayList<String> li : quaternary) {
-                            StringBuilder builder = new StringBuilder();
-                            builder.append(a).append(" (");
-                            for (String s : li) {
-                                builder.append(s).append(", ");
-                            }
-                            builder.delete(builder.length()-2, builder.length());
-                            builder.append(")");
-                            System.out.println(builder.toString());
-                            a++;
-                        }
-                        break;
+//                        int a = 1;
+//                        for (ArrayList<String> li : quaternary) {
+//                            StringBuilder builder = new StringBuilder();
+//                            builder.append(a).append(" (");
+//                            for (String s : li) {
+//                                builder.append(s).append(", ");
+//                            }
+//                            builder.delete(builder.length()-2, builder.length());
+//                            builder.append(")");
+//                            System.out.println(builder.toString());
+//                            a++;
+//                        }
+//                        break;
+                        return true;
                     } else if ("s".equals(info.substring(0, 1))) {
                         int newStatus = Integer.parseInt(info.substring(1));
                         status.push(newStatus);
@@ -321,113 +322,113 @@ public class R1GrammarAnalysis {
                         String[] split = array[1].split(" @ ");
                         String[] array1 = split[0].split(" ");
 
-                        if (split.length > 1) {
-                            try {
-                                String[] split1 = split[1].split(" ");
-                                if ("E".equals(split1[0])) {
-                                    attribute.get(array[0]).push(word.get(word.size() - token.size()));
-                                } else if ("N".equals(split1[0])) {
-                                    attribute.get(array[0]).push(newTemp());
-                                } else if ("P0".equals(split1[0])) {
-                                    if (terminal.contains(array1[0])) {
-                                        attribute.get(array[0]).push(word.get(word.size() - token.size()));
-                                    } else {
-                                        attribute.get(array[0]).push(attribute.get(symbol.peek()).pop());
-                                    }
-                                } else if ("P1".equals(split1[0])) {
-                                    if (terminal.contains(array1[1])) {
-                                        attribute.get(array[0]).push(word.get(word.size() - token.size()));
-                                    } else {
-                                        attribute.get(array[0]).push(attribute.get(array1[1]).pop());
-                                    }
-                                }
-
-                                if ("G1".equals(split1[1])) {
-                                    System.out.println("(" + array1[0] + ", " + attribute.get(array1[1]) + ", , " + attribute.get(array[0]) + ")");
-                                } else if ("G2".equals(split1[1])) {
-                                    String op1 = attribute.get(array1[0]).pop();
-                                    String op2 = attribute.get(array1[2]).pop();
-                                    if (terminal.contains(array1[1])) {
-                                        if ("=".equals(array1[1])) {
-                                            addQuaternary(array1[1], op1, " ", op2);
-                                            num++;
-                                        } else {
-                                            addQuaternary(array1[1], op2, op1, attribute.get(array[0]).peek());
-                                            num++;
-                                        }
-                                    } else {
-                                        addQuaternary(attribute.get(array1[1]).pop(), op2, op1, attribute.get(array[0]).peek());
-                                        num++;
-                                    }
-                                } else if ("G3".equals(split1[1])) {
-                                    String op1 = attribute.get(array1[0]).pop();
-                                    String op2 = attribute.get(array1[2]).pop();
-                                    String op = attribute.get(array1[1]).pop();
-
-                                    addQuaternary("j" + op, op2, op1, (num + 2) + "");
-                                    num++;
-                                    addQuaternary("j", " ", " ", flag + "");
-                                    flag = num;
-                                    num++;
-
-
-                                } else if ("G4".equals(split1[1])) {
-                                    String op1 = attribute.get(array1[0]).pop();
-                                    String op2 = attribute.get(array1[2]).pop();
-
-                                    addQuaternary("jnz", op2, " ", (num + 2) + "");
-                                    num++;
-                                    addQuaternary("j", " ", " ", flag + "");
-                                    flag = num;
-                                    num++;
-                                    addQuaternary("jnz", op1, " ", (num + 2) + "");
-                                    num++;
-                                    addQuaternary("j", " ", " ", flag + "");
-                                    flag = num;
-                                    num++;
-                                } else if ("G5".equals(split1[1])) {
-                                    for (ArrayList<String> li : FC) {
-                                        li.remove(li.size() - 1);
-                                        li.add(num + "");
-                                    }
-                                    FC.clear();
-                                } else if ("G6".equals(split1[1])) {
-                                    ArrayList<String> temp = new ArrayList<>();
-                                    temp.add("j");
-                                    temp.add(" ");
-                                    temp.add(" ");
-                                    temp.add("0");
-                                    quaternary.add(temp);
-                                    for (ArrayList<String> li : quaternary) {
-                                        if ((num + "").equals(li.get(li.size()-1))) {
-                                            li.remove(li.size() - 1);
-                                            li.add((num + 1) + "");
-                                        }
-                                    }
-                                    FC1.add(temp);
-                                } else if ("G7".equals(split1[1])) {
-                                    for (ArrayList<String> li : FC1) {
-                                        li.remove(li.size() - 1);
-                                        li.add((num + 1) + "");
-                                    }
-                                    FC1.clear();
-                                } else if ("G8".equals(split1[1])) {
-                                    ArrayList<String> temp = new ArrayList<>();
-                                    temp.add("j");
-                                    temp.add(" ");
-                                    temp.add(" ");
-                                    temp.add(flag1 + "");
-                                    quaternary.add(temp);
-                                    for (ArrayList<String> li : FC) {
-                                        li.remove(li.size() - 1);
-                                        li.add((num + 1) + "");
-                                    }
-                                    FC.clear();
-                                } else if ("G9".equals(split1[1])) {
-                                    flag1 = num;
-                                }
-                            }catch (Exception e) {}
-                        }
+//                        if (split.length > 1) {
+//                            try {
+//                                String[] split1 = split[1].split(" ");
+//                                if ("E".equals(split1[0])) {
+//                                    attribute.get(array[0]).push(word.get(word.size() - token.size()));
+//                                } else if ("N".equals(split1[0])) {
+//                                    attribute.get(array[0]).push(newTemp());
+//                                } else if ("P0".equals(split1[0])) {
+//                                    if (terminal.contains(array1[0])) {
+//                                        attribute.get(array[0]).push(word.get(word.size() - token.size()));
+//                                    } else {
+//                                        attribute.get(array[0]).push(attribute.get(symbol.peek()).pop());
+//                                    }
+//                                } else if ("P1".equals(split1[0])) {
+//                                    if (terminal.contains(array1[1])) {
+//                                        attribute.get(array[0]).push(word.get(word.size() - token.size()));
+//                                    } else {
+//                                        attribute.get(array[0]).push(attribute.get(array1[1]).pop());
+//                                    }
+//                                }
+//
+//                                if ("G1".equals(split1[1])) {
+//                                    System.out.println("(" + array1[0] + ", " + attribute.get(array1[1]) + ", , " + attribute.get(array[0]) + ")");
+//                                } else if ("G2".equals(split1[1])) {
+//                                    String op1 = attribute.get(array1[0]).pop();
+//                                    String op2 = attribute.get(array1[2]).pop();
+//                                    if (terminal.contains(array1[1])) {
+//                                        if ("=".equals(array1[1])) {
+//                                            addQuaternary(array1[1], op1, " ", op2);
+//                                            num++;
+//                                        } else {
+//                                            addQuaternary(array1[1], op2, op1, attribute.get(array[0]).peek());
+//                                            num++;
+//                                        }
+//                                    } else {
+//                                        addQuaternary(attribute.get(array1[1]).pop(), op2, op1, attribute.get(array[0]).peek());
+//                                        num++;
+//                                    }
+//                                } else if ("G3".equals(split1[1])) {
+//                                    String op1 = attribute.get(array1[0]).pop();
+//                                    String op2 = attribute.get(array1[2]).pop();
+//                                    String op = attribute.get(array1[1]).pop();
+//
+//                                    addQuaternary("j" + op, op2, op1, (num + 2) + "");
+//                                    num++;
+//                                    addQuaternary("j", " ", " ", flag + "");
+//                                    flag = num;
+//                                    num++;
+//
+//
+//                                } else if ("G4".equals(split1[1])) {
+//                                    String op1 = attribute.get(array1[0]).pop();
+//                                    String op2 = attribute.get(array1[2]).pop();
+//
+//                                    addQuaternary("jnz", op2, " ", (num + 2) + "");
+//                                    num++;
+//                                    addQuaternary("j", " ", " ", flag + "");
+//                                    flag = num;
+//                                    num++;
+//                                    addQuaternary("jnz", op1, " ", (num + 2) + "");
+//                                    num++;
+//                                    addQuaternary("j", " ", " ", flag + "");
+//                                    flag = num;
+//                                    num++;
+//                                } else if ("G5".equals(split1[1])) {
+//                                    for (ArrayList<String> li : FC) {
+//                                        li.remove(li.size() - 1);
+//                                        li.add(num + "");
+//                                    }
+//                                    FC.clear();
+//                                } else if ("G6".equals(split1[1])) {
+//                                    ArrayList<String> temp = new ArrayList<>();
+//                                    temp.add("j");
+//                                    temp.add(" ");
+//                                    temp.add(" ");
+//                                    temp.add("0");
+//                                    quaternary.add(temp);
+//                                    for (ArrayList<String> li : quaternary) {
+//                                        if ((num + "").equals(li.get(li.size()-1))) {
+//                                            li.remove(li.size() - 1);
+//                                            li.add((num + 1) + "");
+//                                        }
+//                                    }
+//                                    FC1.add(temp);
+//                                } else if ("G7".equals(split1[1])) {
+//                                    for (ArrayList<String> li : FC1) {
+//                                        li.remove(li.size() - 1);
+//                                        li.add((num + 1) + "");
+//                                    }
+//                                    FC1.clear();
+//                                } else if ("G8".equals(split1[1])) {
+//                                    ArrayList<String> temp = new ArrayList<>();
+//                                    temp.add("j");
+//                                    temp.add(" ");
+//                                    temp.add(" ");
+//                                    temp.add(flag1 + "");
+//                                    quaternary.add(temp);
+//                                    for (ArrayList<String> li : FC) {
+//                                        li.remove(li.size() - 1);
+//                                        li.add((num + 1) + "");
+//                                    }
+//                                    FC.clear();
+//                                } else if ("G9".equals(split1[1])) {
+//                                    flag1 = num;
+//                                }
+//                            }catch (Exception e) {}
+//                        }
 
                         for (int i = 0; i < array1.length; i++) {
                             status.pop();
@@ -437,7 +438,8 @@ public class R1GrammarAnalysis {
                         String info1 = GOTO[status.peek() + 1][nonTerminal.indexOf(newSymbol) + 1];
                         if (info1 == null) {
                             System.out.println("goto查表为空 坐标：(" + (status.peek() + 1) + ", " + (nonTerminal.indexOf(newSymbol) + 1) + ")");
-                            break;
+//                            break;
+                            return false;
                         }
                         int newStatus = Integer.parseInt(GOTO[status.peek() + 1][nonTerminal.indexOf(newSymbol) + 1]);
                         status.push(newStatus);
@@ -445,15 +447,18 @@ public class R1GrammarAnalysis {
                     } else {
 //                        error(info, word, token);
                         System.out.println("错误");
-                        break;
+//                        break;
+                        return false;
                     }
                 } else {
                     System.out.println("action查表为空 坐标：(" + (topStatus + 1) + ", " + (terminal.indexOf(firstToken) + 1) + ")");
-                    break;
+//                    break;
+                    return false;
                 }
             } else {
                 System.out.println("错误");
-                break;
+//                break;
+                return false;
             }
         }
     }

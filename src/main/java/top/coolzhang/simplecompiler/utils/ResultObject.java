@@ -11,6 +11,8 @@ public class ResultObject {
 
     private ArrayList<Token> lexical;
 
+    private String grammarResult;
+
     public Integer getStatus() {
         return status;
     }
@@ -33,5 +35,13 @@ public class ResultObject {
 
     public void setLexical(ArrayList<Token> lexical) {
         this.lexical = lexical;
+    }
+
+    public String getGrammarResult() {
+        return grammarResult;
+    }
+
+    public void setGrammarResult(String grammarResult) {
+        this.grammarResult = grammarResult;
     }
 }

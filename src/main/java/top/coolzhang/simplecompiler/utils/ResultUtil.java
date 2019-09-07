@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public final class ResultUtil {
     private final static int SUCCESS_CODE = 1;
     private final static String SUCCESS_MSG = "SUCCESS";
+    private final static String GRAMMAR_RESULT = "语法分析通过";
     private final static int FAIL_CODE = 0;
     private final static String FAIL_MSG = "FAIL";
     private final static int ERROR_CODE = -1;
@@ -22,10 +23,15 @@ public final class ResultUtil {
     }
 
     public static ResultObject success(String msg, ArrayList<Token> o) {
+        return success(msg, o, null);
+    }
+
+    public static ResultObject success(String msg, ArrayList<Token> o, String grammarResult) {
         ResultObject resultObject = new ResultObject();
         resultObject.setStatus(SUCCESS_CODE);
         resultObject.setMsg(msg == null ? SUCCESS_MSG : msg);
         resultObject.setLexical(o);
+        resultObject.setGrammarResult(grammarResult == null ? GRAMMAR_RESULT : grammarResult);
         return resultObject;
     }
 
@@ -43,10 +49,15 @@ public final class ResultUtil {
     }
 
     public static ResultObject fail(int status, String msg, ArrayList<Token> o) {
+        return fail(status, msg, o, null);
+    }
+
+    public static ResultObject fail(int status, String msg, ArrayList<Token> o, String grammarResult) {
         ResultObject resultObject = new ResultObject();
         resultObject.setStatus(status);
-        resultObject.setMsg(msg == null ? FAIL_MSG : msg);
+        resultObject.setMsg(msg == null ? FAIL_MSG: msg);
         resultObject.setLexical(o);
+        resultObject.setGrammarResult(grammarResult);
         return resultObject;
     }
 }

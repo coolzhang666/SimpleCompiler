@@ -456,7 +456,7 @@ public class R1TableUtil {
         // 保存 action 表
         try {
             String path = R1TableUtil.class.getResource("/").getPath();
-            path = path.replace("target/classes/", "");
+            path = path.replace("target/test-classes/", "");
             File file = new File(path + "src/main/resources/action.txt");
 
             if (!file.exists()) {
@@ -484,7 +484,7 @@ public class R1TableUtil {
         // 保存 GOTO 表
         try {
             String path = R1TableUtil.class.getResource("/").getPath();
-            path = path.replace("target/classes/", "");
+            path = path.replace("target/test-classes/", "");
             File file = new File(path + "src/main/resources/goto.txt");
 
             if (!file.exists()) {
@@ -512,7 +512,7 @@ public class R1TableUtil {
         // 保存终结符
         try {
             String path = R1TableUtil.class.getResource("/").getPath();
-            path = path.replace("target/classes/", "");
+            path = path.replace("target/test-classes/", "");
             File file = new File(path + "src/main/resources/terminalSymbol.txt");
 
             if (!file.exists()) {
@@ -534,7 +534,7 @@ public class R1TableUtil {
         // 保存非终结符
         try {
             String path = R1TableUtil.class.getResource("/").getPath();
-            path = path.replace("target/classes/", "");
+            path = path.replace("target/test-classes/", "");
             File file = new File(path + "src/main/resources/nonTerminalSymbol.txt");
 
             if (!file.exists()) {
@@ -556,7 +556,7 @@ public class R1TableUtil {
         // 保存产生式
         try {
             String path = R1TableUtil.class.getResource("/").getPath();
-            path = path.replace("target/classes/", "");
+            path = path.replace("target/test-classes/", "");
             File file = new File(path + "src/main/resources/production.txt");
 
             if (!file.exists()) {
