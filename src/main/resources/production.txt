@@ -1,68 +1,116 @@
 code->program
-program->code_block program
-program->code_block
-code_block->variable_declaration
-code_block->statement
-variable_declaration->type identifier variable_declaration_right
+expression->assignment_expression
+assignment_expression->or_expression
+assignment_expression->or_expression = or_expression
+or_expression->or_expression_table
+or_expression_table->and_expression
+or_expression_table->and_expression || or_expression_table
+and_expression->and_expression_table
+and_expression_table->relational_expression
+and_expression_table->relational_expression && and_expression_table
+relational_expression->arithmetic_expression
+relational_expression->arithmetic_expression relational_operator arithmetic_expression
+relational_operator->>
+relational_operator-><
+relational_operator->>=
+relational_operator-><=
+relational_operator->==
+relational_operator->!=
+arithmetic_expression->item + arithmetic_expression
+arithmetic_expression->item - arithmetic_expression
+arithmetic_expression->item
+item->factor * item
+item->factor / item
+item->factor % item
+item->factor
+factor->! factor
+factor->( or_expression )
+factor->constant
+factor->identifier
+factor->function_call
+constant->integer
+constant->decimal
+constant->character
+constant->string
+function_call->identifier ( real_param )
+function_call->identifier ( )
+real_param->expression
+real_param->expression , real_param
+statement->declaration_block
+statement->execute_statement
+statement->complex_statement
+declaration_statement->value_declaration
+declaration_statement->function_declaration
+value_declaration->constant_declaration
+value_declaration->variable_declaration
+constant_declaration->constant_declaration_left constant_declaration_table
+constant_declaration_left->const type
 type->int
 type->float
 type->char
-variable_declaration_right->init variable_declaration_list
-variable_declaration_right->variable_declaration_list
-init->= expression
-expression->assignment_expression @ P0 null
-assignment_expression->or_expression @ P0 null
-assignment_expression->or_expression = or_expression @ N G2
-or_expression->and_expression @ P0 null
-or_expression->and_expression || and_expression @ N1 G4
-and_expression->relational_expression @ P0 null
-and_expression->relational_expression && relational_expression @ N1 G4
-relational_expression->arithmetic_expression @ P0 null
-relational_expression->arithmetic_expression relational_operator arithmetic_expression @ N1 G3
-arithmetic_expression->item @ P0 null
-arithmetic_expression->item add_sub_operator item @ N G2
-item->factor @ P0 null
-item->factor mul_dev_operator factor @ N G2
-factor->! factor @ N G1
-factor->identifier @ P0 null
-factor->( expression ) @ P1 null
-factor->constant @ P0 null
-constant->integer @ E null
-constant->character @ E null
-constant->string @ E null
-relational_operator->> @ E null
-relational_operator->< @ E null
-relational_operator->>= @ E null
-relational_operator-><= @ E null
-relational_operator->== @ E null
-relational_operator->!= @ E null
-add_sub_operator->+ @ E null
-add_sub_operator->- @ E null
-mul_dev_operator->* @ E null
-mul_dev_operator->/ @ E null
-mul_dev_operator->% @ E null
-variable_declaration_list->temp init variable_declaration_list
-variable_declaration_list->temp variable_declaration_list
-variable_declaration_list->temp ;
-variable_declaration_list->;
-temp->, identifier
-statement->expression ;
-statement->while_loop
-statement->for_loop
-statement->dowhile_loop
-statement->if_statement
-statement->break ;
-statement->continue ;
-statement->return ;
-statement->return expression ;
-while_loop->kw_while ( expression ) block @ N1 G8
-kw_while->while @ N1 G9
-block->{ program }
-block->{ }
-for_loop->for ( expression ; expression ; expression ) block
-dowhile_loop->do block kw_while ( expression ) ;
-if_statement->if_statement_begin else_statement
-if_statement->if_statement_begin
-if_statement_begin->if ( expression ) block @ N1 G5
-else_statement->kw_else block @ N1 G7
-kw_else->else @ N1 G6
+type->void
+constant_declaration_table->identifier = constant ;
+constant_declaration_table->identifier = constant , constant_declaration_table
+variable_declaration->type variable_declaration_table
+variable_declaration_table->identifier ;
+variable_declaration_table->identifier = expression ;
+variable_declaration_table->identifier , variable_declaration_table
+variable_declaration_table->identifier = expression , variable_declaration_table
+function_declaration->type identifier ( function_declaration_form ) ;
+function_declaration->type identifier ( ) ;
+function_declaration_form->type
+function_declaration_form->type , function_declaration_form
+execute_statement->data_processing_statement
+execute_statement->control_statement
+execute_statement->complex_statement
+data_processing_statement->assignment_statement
+data_processing_statement->function_call_statement
+assignment_statement->assignment_expression ;
+function_call_statement->function_call ;
+control_statement->if_statement
+control_statement->for_statement
+control_statement->while_statement
+control_statement->do_while_statement
+control_statement->break_statement
+control_statement->continue_statement
+control_statement->return_statement
+control_statement->read_statement
+control_statement->write_statement
+read_statement->read ( identifier ) ;
+write_statement->write ( identifier ) ;
+complex_statement->left_bracket statement_table right_bracket
+complex_statement->left_bracket right_bracket
+left_bracket->{
+right_bracket->}
+statement_table->statement
+statement_table->statement statement_table
+if_statement->without_else complex_statement
+if_statement->with_else complex_statement
+without_else->kw_if ( expression )
+kw_if->if
+with_else->without_else complex_statement else
+for_statement->for_statement_begin complex_statement
+for_statement_begin->expression_2 expression )
+expression_2->expression_1 expression ;
+expression_1->kw_for ( expression ;
+kw_for->for
+while_statement->while ( expression ) complex_statement
+do_while_statement->do_while_begin ( expression ) ;
+do_while_begin->kw_do complex_statement while
+kw_do->do
+break_statement->break ;
+continue_statement->continue ;
+return_statement->return ;
+return_statement->return expression ;
+function_definition->type identifier ( ) complex_statement
+function_definition->type identifier ( function_definition_form ) complex_statement
+function_definition_form->type identifier
+function_definition_form->type identifier , function_definition_form
+program->main_function
+program->declaration_block main_function
+declaration_block->declaration_statement
+declaration_block->declaration_statement declaration_block
+main_function->main ( ) complex_statement
+main_function->main ( ) complex_statement function_block
+function_block->function_definition
+function_block->function_definition function_block

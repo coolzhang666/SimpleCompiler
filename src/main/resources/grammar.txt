@@ -1,61 +1,117 @@
 code->program
 
-program->code_block program $ code_block
+expression->assignment_expression
 
-code_block->variable_declaration $ statement
+assignment_expression->or_expression $ or_expression = or_expression
 
-variable_declaration->type identifier variable_declaration_right
+or_expression->or_expression_table
 
-type->int $ float $ char
+or_expression_table->and_expression $ and_expression || or_expression_table
 
-variable_declaration_right->init variable_declaration_list $ variable_declaration_list
+and_expression->and_expression_table
 
-init->= expression
+and_expression_table->relational_expression $ relational_expression && and_expression_table
 
-expression->assignment_expression @ P0 null
+relational_expression->arithmetic_expression $ arithmetic_expression relational_operator arithmetic_expression
 
-assignment_expression->or_expression @ P0 null $ or_expression = or_expression @ N G2
+relational_operator->> $ < $ >= $ <= $ == $ !=
 
-or_expression->and_expression @ P0 null $ and_expression || and_expression @ N1 G4
+arithmetic_expression->item + arithmetic_expression $ item - arithmetic_expression $ item
 
-and_expression->relational_expression @ P0 null $ relational_expression && relational_expression @ N1 G4
+item->factor * item $ factor / item $ factor % item $ factor
 
-relational_expression->arithmetic_expression @ P0 null $ arithmetic_expression relational_operator arithmetic_expression @ N1 G3
+factor->! factor $ ( or_expression ) $ constant $ identifier $ function_call
 
-arithmetic_expression->item @ P0 null $ item add_sub_operator item @ N G2
+constant->integer $ decimal $ character $ string
 
-item->factor @ P0 null $ factor mul_dev_operator factor @ N G2
+function_call->identifier ( real_param ) $ identifier ( )
 
-factor->! factor @ N G1 $ identifier @ P0 null $ ( expression ) @ P1 null $ constant @ P0 null
+real_param->expression $ expression , real_param
 
-constant->integer @ E null $ character @ E null $ string @ E null
+statement->declaration_block $ execute_statement $ complex_statement
 
-relational_operator->> @ E null $ < @ E null $ >= @ E null $ <= @ E null $ == @ E null $ != @ E null
+declaration_statement->value_declaration $ function_declaration
 
-add_sub_operator->+ @ E null $ - @ E null
+value_declaration->constant_declaration $ variable_declaration
 
-mul_dev_operator->* @ E null $ / @ E null $ % @ E null
+constant_declaration->constant_declaration_left constant_declaration_table
 
-variable_declaration_list->temp init variable_declaration_list $ temp variable_declaration_list $ temp ; $ ;
+constant_declaration_left->const type
 
-temp->, identifier
+type->int $ float $ char $ void
 
-statement->expression ; $ while_loop $ for_loop $ dowhile_loop $ if_statement $ break ; $ continue ; $ return ; $ return expression ;
+constant_declaration_table->identifier = constant ; $ identifier = constant , constant_declaration_table
 
-while_loop->kw_while ( expression ) block @ N1 G8
+variable_declaration->type variable_declaration_table
 
-kw_while->while @ N1 G9
+variable_declaration_table->identifier ; $ identifier = expression ; $ identifier , variable_declaration_table $ identifier = expression , variable_declaration_table
 
-block->{ program } $ { }
+function_declaration->type identifier ( function_declaration_form ) ; $ type identifier ( ) ;
 
-for_loop->for ( expression ; expression ; expression ) block
+function_declaration_form->type $ type , function_declaration_form
 
-dowhile_loop->do block kw_while ( expression ) ;
+execute_statement->data_processing_statement $ control_statement $ complex_statement
 
-if_statement->if_statement_begin else_statement $ if_statement_begin
+data_processing_statement->assignment_statement $ function_call_statement
 
-if_statement_begin->if ( expression ) block @ N1 G5
+assignment_statement->assignment_expression ;
 
-else_statement->kw_else block @ N1 G7
+function_call_statement->function_call ;
 
-kw_else->else @ N1 G6
+control_statement->if_statement $ for_statement $ while_statement $ do_while_statement $ break_statement $ continue_statement $ return_statement $ read_statement $ write_statement
+
+read_statement->read ( identifier ) ;
+
+write_statement->write ( identifier ) ;
+
+complex_statement->left_bracket statement_table right_bracket $ left_bracket right_bracket
+
+left_bracket->{
+
+right_bracket->}
+
+statement_table->statement $ statement statement_table
+
+if_statement->without_else complex_statement $ with_else complex_statement
+
+without_else->kw_if ( expression )
+
+kw_if->if
+
+with_else->without_else complex_statement else
+
+for_statement->for_statement_begin complex_statement
+
+for_statement_begin->expression_2 expression )
+
+expression_2->expression_1 expression ;
+
+expression_1->kw_for ( expression ;
+
+kw_for->for
+
+while_statement->while ( expression ) complex_statement
+
+do_while_statement->do_while_begin ( expression ) ;
+
+do_while_begin->kw_do complex_statement while
+
+kw_do->do
+
+break_statement->break ;
+
+continue_statement->continue ;
+
+return_statement->return ; $ return expression ;
+
+function_definition->type identifier ( ) complex_statement $ type identifier ( function_definition_form ) complex_statement
+
+function_definition_form->type identifier $ type identifier , function_definition_form
+
+program->main_function $ declaration_block main_function
+
+declaration_block->declaration_statement $ declaration_statement declaration_block
+
+main_function->main ( ) complex_statement $ main ( ) complex_statement function_block
+
+function_block->function_definition $ function_definition function_block
