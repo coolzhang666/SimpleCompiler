@@ -1,0 +1,234 @@
+源代码
+	程序
+	
+程序
+	主函数
+	|声明语句块 主函数
+
+主函数
+	main ( ) 复合语句
+	| main ( ) 复合语句 函数块
+
+复合语句
+	左大括号 语句表 右大括号
+	|左大括号 右大括号
+
+左大括号
+	{
+
+右大括号
+	}
+
+语句表
+	语句
+	|语句 语句表
+
+语句
+	声明语句块
+	|执行语句
+	|复合语句
+
+声明语句块
+	声明语句
+	|声明语句 声明语句块
+
+声明语句
+	值声明
+	|函数声明
+
+值声明
+	常量声明
+	|变量声明
+
+常量声明
+	常量声明左部 常量声明表 【常量声明.in = 常量声明左部.type】
+
+常量声明左部
+	const 类型 【常量声明左部.type = 类型.type】
+
+类型
+	int 【类型.type = int】
+	|float 【类型.type = float】
+	|char 【类型.type = char】
+	|void 【类型.type = void】
+
+常量声明表
+	标识符 = 常量 ; 【将标识符插入符号表】【标识符.value = 常量.value】【标识符.type = 常量声明表.type】
+	|标识符 = 常量 , 常量声明表 【将标识符插入符号表】【标识符.value = 常量.value】【常量声明表(后).in = 常量声明表(前).in】【标识符.type = 常量声明表(前).in】
+
+变量声明
+	类型 变量声明表 【变量声明表.in = 类型.type】
+
+变量声明表
+	标识符 ; 【将标识符插入符号表】【标识符.type = 变量声明表.in】
+	|标识符 = 表达式 ; 【将标识符插入符号表】【标识符.type = 变量声明表.in】【标识符.value = 表达式.value】
+	|标识符 , 变量声明表 【将标识符插入符号表】【标识符.type = 变量声明表(前).in】【变量声明表(后).in = 变量声明表(前).in】
+	|标识符 = 表达式 , 变量声明表 【将标识符插入符号表】【标识符.type = 变量声明表(前).in】【标识符.value = 表达式.value】【变量声明表(后).in = 变量声明表(前).in】
+
+表达式
+	赋值表达式 【表达式.place = newtemp()】【表达式.place = 赋值表达式.place】【表达式.type = 赋值表达式.type】
+
+赋值表达式
+	或表达式 【赋值表达式.place = newtemp()】【赋值表达式.place = 或表达式.place】【赋值表达式.type = 或表达式.type】
+	|或表达式 = 或表达式 【gencode(=, 或表达式(后), , 或表达式(前))】
+
+或表达式
+	或表达式表 【或表达式.place = newtemp()】【或表达式.place = 或表达式表.place】【或表达式.type = 或表达式表.type】
+
+或表达式表
+	与表达式 【或表达式表.place = newtemp()】【或表达式表.place = 与表达式.place】【或表达式表.type = 与表达式.type】
+	|与表达式 || 或表达式表
+
+与表达式
+	与表达式表 【与表达式.place = newtemp()】【与表达式.place = 与表达式表.place】【与表达式.type = 与表达式表.type】
+
+与表达式表
+	关系表达式 【与表达式表.place = newtemp()】【与表达式表.place = 关系表达式.place】【与表达式表.type = 关系表达式.type】
+	|关系表达式 && 与表达式表
+
+关系表达式
+	算术表达式 【关系表达式.place = newtemp()】【关系表达式.place = 算术表达式.place】【关系表达式.type = 算术表达式.type】
+	|算术表达式 关系操作符 算术表达式
+
+算术表达式
+	项 + 算术表达式 【项(前).place = newtemp()】【gencode(+, 因子.place, 项(后).place, 项(前).place)】【项(前).type = ?】
+	|项 - 算术表达式 【项(前).place = newtemp()】【gencode(-, 因子.place, 项(后).place, 项(前).place)】【项(前).type = ?】
+	|项 【算术表达式.place = newtemp()】【算术表达式.place = 项.place】【算术表达式.type = 项.type】
+
+项
+	因子 * 项 【项(前).place = newtemp()】【gencode(*, 因子.place, 项(后).place, 项(前).place)】【项(前).type = ?】
+	|因子 / 项 【项(前).place = newtemp()】【gencode(/, 因子.place, 项(后).place, 项(前).place)】【项(前).type = ?】
+	|因子 % 项 【项(前).place = newtemp()】【gencode(%, 因子.place, 项(后).place, 项(前).place)】【项(前).type = 因子.type】
+	|因子 【项.place = newtemp()】【项.place = 因子.place】【项.value = 因子.value】【项.type = 因子.type】
+
+因子
+	! 因子 【】
+	|( 或表达式 ) 【因子.place = newtemp()】【因子.place = 或表达式.place】【因子.type = 常量.type】
+	|常量 【因子.place = newtemp()】【因子.place = 常量.place】【因子.type = 常量.type】
+	|标识符 【因子.place = newtemp()】【因子.place = 标识符.place】【因子.type = 因子.type】
+	|函数调用 【因子.place = 函数调用.place】【因子.type = 函数调用.returnType】
+
+常量
+	integer
+	|decimal
+	|character
+	|string
+
+函数调用
+	标识符 ( 实参 )
+	|标识符 ( )
+
+实参
+	表达式
+	|表达式 , 实参
+
+关系操作符
+	>
+	|<
+	|>=
+	|<=
+	|==
+	|!=
+
+函数声明
+	类型 标识符 ( 形参列表 ) ; 【将标识符(函数名)插入符号表中】【标识符.returnType = 类型.type】【标识符.parameters = 形参列表.parameters】【标识符.para = 形参列表.para】
+	|类型 标识符 ( ) ; 【将标识符(函数名)插入符号表中】【标识符.returnType = 类型.type】【标识符.parameters = 0】
+
+形参列表
+	类型 【形参列表.parameters = 类型.parameters】【形参列表.para = 类型.para】
+	|类型 , 形参列表 【形参列表(左).parameters = 形参列表(右).parameters + 1】【形参列表(左).para = 形参列表(右).para + "," + 类型.para】
+
+执行语句
+	数据处理语句
+	|控制语句
+	|复合语句
+
+数据处理语句
+	赋值语句
+	|函数调用语句
+
+赋值语句
+	赋值表达式 ;
+
+函数调用语句
+	函数调用 ;
+
+控制语句
+	if语句
+	|for语句
+	|while语句
+	|dowhile语句
+	|break语句
+	|continue语句
+	|return语句
+	|read语句
+	|write语句
+
+if语句
+	不带else 复合语句
+	|带else 复合语句
+
+不带else
+	if关键字 ( 表达式 )
+
+if关键字
+	if
+
+带else
+	不带else 复合语句 else
+
+for语句
+	for语句开始 复合语句
+
+for语句开始
+	表达式2 表达式 )
+
+表达式2
+	表达式1 表达式 ;
+
+表达式1
+	for关键字 ( 表达式 ;
+
+for关键字
+	for
+
+while语句
+	while ( 表达式 ) 复合语句
+
+dowhile语句
+	dowhile语句开始 ( 表达式 ) ;
+
+dowhile语句开始
+	do关键字 复合语句 while
+
+do关键字
+	do
+
+break语句
+	break ;
+
+continue语句
+	continue ;
+
+return语句
+	return ;
+	|return 表达式 ;
+
+read语句
+	read ( 标识符 ) ;
+
+write语句
+	write ( 标识符 ) ;
+
+函数块
+	函数声明
+	|函数定义 函数块
+
+函数定义
+	类型 标识符 ( ) 复合语句
+	|类型 标识符 ( 函数定义参数列表 ) 复合语句
+
+函数定义参数列表
+	类型 标识符
+	|类型 标识符 , 函数定义参数列表
+
