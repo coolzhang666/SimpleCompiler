@@ -18,13 +18,7 @@ public class RunController {
     @PostMapping("/run")
     public ResultObject run(String code) {
         ArrayList<Token> tokens = runService.run(code);
-        ArrayList<String> list1 = new ArrayList<>();
-        ArrayList<String> list2 = new ArrayList<>();
-        for (Token token : tokens) {
-            list1.add(token.getName());
-            list2.add(token.getValue());
-        }
-        boolean f = runService.grammar(list1, list2);
+        boolean f = runService.grammar(tokens);
         if (f) {
             return ResultUtil.success("操作成功", tokens, "语法分析通过");
         } else {

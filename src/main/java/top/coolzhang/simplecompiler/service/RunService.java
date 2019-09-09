@@ -1,14 +1,13 @@
 package top.coolzhang.simplecompiler.service;
 
 import org.springframework.stereotype.Service;
-import top.coolzhang.simplecompiler.algorithm.grammar.R1TableUtil;
+import top.coolzhang.simplecompiler.algorithm.grammar.GrammarAnalyzer;
 import top.coolzhang.simplecompiler.algorithm.lexical.LexicalAnalyzer;
 import top.coolzhang.simplecompiler.algorithm.lexical.Token;
 
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -23,10 +22,8 @@ public class RunService {
         return lexicalAnalyzer.getToken();
     }
 
-    public boolean grammar(List<String> token, List<String> word) {
-//        R1TableUtil r1TableUtil = new R1TableUtil();
-//        r1TableUtil.init();
-//        return r1TableUtil.judge(new LinkedList<>(token));
-        return false;
+    public boolean grammar(List<Token> token) {
+        GrammarAnalyzer analyzer = new GrammarAnalyzer();
+        return analyzer.judge(token);
     }
 }

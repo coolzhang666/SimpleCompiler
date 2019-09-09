@@ -720,7 +720,70 @@ public class R1TableUtil {
         }
     }
 
+    public boolean judge(LinkedList<String> token) {
+        Stack<Integer> status = new Stack<>();
+        Stack<String> symbol = new Stack<>();
+        status.push(0);
+        symbol.push("#");
+        token.addLast("#");
+        LinkedList<String> temp = new LinkedList<>(terminal);
+        LinkedList<String> temp1 = new LinkedList<>(nonTerminal);
+
+        while (true) {
+            Integer top1 = status.peek();
+            String top2 = token.peekFirst();
+
+            if (terminal.contains(top2)) {
+                int index1 = top1 + 1;
+                int index2 = temp.indexOf(top2) + 1;
+                String s = action[index1][index2];
+                if (s != null) {
+                    if ("acc".equals(s)) {
+                        System.out.println("成功");
+                        return true;
+                    } else if ("s".equals(s.substring(0, 1))) {
+                        int newStatus = Integer.parseInt(s.substring(1));
+                        status.push(newStatus);
+                        symbol.push(token.pollFirst());
+                    } else if ("r".equals(s.substring(0, 1))) {
+                        int id = Integer.parseInt(s.substring(1));
+
+                        GrammarNode node = grammar1.get(id);
+                        String newSymbol = node.getValue();
+                        String s1 = node.getNext().getValue();
+                        List<String> list = Arrays.asList(s1.split(" "));
+                        for (int i = 0; i < list.size(); i++) {
+                            status.pop();
+                            symbol.pop();
+                        }
+                        int index3 = status.peek() + 1;
+                        int index4 = temp1.indexOf(newSymbol) + 1;
+                        int newStatus = Integer.parseInt(GOTO[index3][index4]);
+                        status.push(newStatus);
+                        symbol.push(newSymbol);
+                    } else {
+                        System.out.println("错误");
+                        return false;
+                    }
+                } else {
+                    System.out.println("错误");
+                    return false;
+                }
+            }
+        }
+    }
+
     public void init() {
+        try {
+            initGrammar();
+            initTerminalandNonTerminal();
+            getFirst();
+            initProjectSet();
+            createDFA();
+            createActionAndGoto();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
